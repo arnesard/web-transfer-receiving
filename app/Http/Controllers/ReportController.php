@@ -78,9 +78,12 @@ class ReportController extends Controller
             })
             ->toArray(); // 🔥 PENTING
 
-        // Get unique employee names for autocomplete — cached 5 minutes
+        // Get unique employee names for autocomplete (Production only)
         $all_employee_names = Cache::remember('all_employee_names', 300, function () {
-            return Employee::orderBy('name')->distinct()->pluck('name');
+            return Employee::whereIn('plant', ['B', 'H', 'I', 'T'])
+                ->orderBy('name')
+                ->distinct()
+                ->pluck('name');
         });
 
         $all_jobs = Reception::select('job_today')

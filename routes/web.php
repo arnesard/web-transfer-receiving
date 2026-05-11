@@ -127,16 +127,26 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('transfer-rak/karyawan')->group(function () {
         Route::get('/', [KaryawanTransfer::class, 'index'])->name('karyawan.index');
         Route::post('/store', [KaryawanTransfer::class, 'store'])->name('karyawan.store');
-        Route::post('/update/{id}', [KaryawanTransfer::class, 'update'])->name('karyawan.update');
-        Route::delete('/delete/{id}', [KaryawanTransfer::class, 'destroy'])->name('karyawan.delete');
+        Route::match(['post', 'put'], '/update/{id}', [KaryawanTransfer::class, 'update'])->name('karyawan.update');
+        Route::match(['post', 'delete'], '/delete/{id}', [KaryawanTransfer::class, 'destroy'])->name('karyawan.delete');
+
+        // Route Baru buat Supir
+        Route::post('/supir/store', [KaryawanTransfer::class, 'storeSupir'])->name('supir.store');
+        Route::match(['post', 'put'], '/supir/update/{id}', [KaryawanTransfer::class, 'updateSupir'])->name('supir.update');
+        Route::match(['post', 'delete'], '/supir/delete/{id}', [KaryawanTransfer::class, 'destroySupir'])->name('supir.delete');
     });
 
-    //PILIH MENU SETELAH LOGIN
-    Route::get('/dashboard', [PilihMenuController::class, 'index'])
+    // PILIH MENU SETELAH LOGIN
+    Route::get('/menu', [PilihMenuController::class, 'index'])
+        ->name('pilihmenu.index');
+
+    // DASHBOARD PENERIMAAN PRODUKSI (dashboard_auth)
+    Route::get('/dashboard', [ProductionController::class, 'dashboard'])
         ->name('dashboard');
+
     Route::get('/penerimaan-produksi', [ProductionController::class, 'inputForm'])
         ->name('penerimaan.index');
-    Route::get('/menu', [PilihMenuController::class, 'index'])->name('pilihmenu.index');
+
     Route::post('/pilih-menu/set-session', [PilihMenuController::class, 'pilih'])
         ->name('pilihmenu.set');
 });

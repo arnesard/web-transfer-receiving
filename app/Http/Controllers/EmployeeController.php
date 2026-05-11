@@ -9,7 +9,10 @@ class EmployeeController extends Controller
 {
     public function index()
     {
-        $employees = Employee::orderBy('name')->get();
+        // Hanya tampilkan karyawan produksi (B, H, I, T) agar tidak campur dengan Transfer Rak
+        $employees = Employee::whereIn('plant', ['B', 'H', 'I', 'T'])
+            ->orderBy('name')
+            ->get();
         return view('employees.index', compact('employees'));
     }
 

@@ -19,7 +19,7 @@ class TransferRakController extends Controller
      */
     public function index()
     {
-        $karyawan = Employee::orderBy('name')->get();
+        $karyawan = Employee::where('plant', 'TR')->orderBy('name')->get();
         return view('MonitoringTransferRak.monitoring', compact('karyawan'));
     }
 
